@@ -118,8 +118,8 @@ function setup() {
       let y = prevParticle.y + segmentLength * sin(angle);
       let particle = new Particle(x, y);
       particles.push(particle);
-      // Looser springs for more fluid movement
-      springs.push(new Spring(prevParticle, particle, 0.005));
+      // Softer than body but still holds tentacle shape
+      springs.push(new Spring(prevParticle, particle, 0.02));
       prevParticle = particle;
     }
   }
@@ -142,36 +142,35 @@ function setup() {
     // Create curved path for each tendril
     for (let j = 1; j < numSegments; j++) {
       let t = j / numSegments;
-      // Add varying offsets for organic look
       let offsetY = sin(i * PI/2) * 30 * (1 - abs(t - 0.5) * 2);
       let x = lerp(eyes[0].x, eyes[1].x, t);
       let y = lerp(eyes[0].y, eyes[1].y, t) + offsetY;
       
       let tendrilPoint = new Particle(x, y);
       particles.push(tendrilPoint);
-      springs.push(new Spring(prevPoint, tendrilPoint, 0.002));
+      springs.push(new Spring(prevPoint, tendrilPoint, 0.015));
       prevPoint = tendrilPoint;
     }
-    
-    // Connect to right eye
-    springs.push(new Spring(prevPoint, eyes[1], 0.002));
+    springs.push(new Spring(prevPoint, eyes[1], 0.015));
   }
 
-  // Connect eyes to body
+  // Connect eyes to body (stronger so eyes stay with body)
   eyes.forEach(eye => {
-    // Connect each eye to multiple body points
     for (let i = 0; i < 4; i++) {
       let bodyPoint = particles[floor(random(numPoints))];
-      springs.push(new Spring(eye, bodyPoint, 0.005));
+      springs.push(new Spring(eye, bodyPoint, 0.04));
     }
   });
 
-  // Connect body particles with springs
+  // Connect body particles with springs (stiffer = more body integrity)
   for (let i = 0; i < numPoints; i++) {
-    // Connect to next particle
-    springs.push(new Spring(particles[i], particles[(i + 1) % numPoints], 0.01));
-    // Connect across body for stability
-    springs.push(new Spring(particles[i], particles[(i + numPoints/2) % numPoints], 0.005));
+    // Main ring: stiffer so body holds shape
+    springs.push(new Spring(particles[i], particles[(i + 1) % numPoints], 0.07));
+    // Opposite side: keeps body from flattening
+    springs.push(new Spring(particles[i], particles[(i + numPoints/2) % numPoints], 0.05));
+    // Extra cross-links: one step either side of opposite for firmer mesh
+    springs.push(new Spring(particles[i], particles[(i + numPoints/2 - 1 + numPoints) % numPoints], 0.03));
+    springs.push(new Spring(particles[i], particles[(i + numPoints/2 + 1) % numPoints], 0.03));
   }
 
   setupMovementSound();
@@ -253,12 +252,12 @@ function draw() {
       }
       updateCreatureColor();
 
-      // Repulsion from all hands
+      // Repulsion from all hands (gentler so body deforms but doesn’t fly apart)
       for (let pt of handPoints) {
         particles.forEach(particle => {
           let d = dist(particle.x - width/2, particle.y - height/2, pt.indexX, pt.indexY);
-          if (d < 100) {
-            let force = map(d, 0, 100, 15, 0);
+          if (d < 90) {
+            let force = map(d, 0, 90, 5, 0);  // Softer push, body stays cohesive
             let angle = atan2(particle.y - height/2 - pt.indexY, particle.x - width/2 - pt.indexX);
             particle.x += cos(angle) * force;
             particle.y += sin(angle) * force;
