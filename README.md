@@ -62,6 +62,24 @@ If you open the file directly from the disk (`file://`), MediaPipe may not load.
 
 ---
 
+## Why the live app (GitHub Pages) might not update
+
+After you push, the site at **https://marlonbarrios.github.io/extraordinary_alien2/** can still show the old version for a few reasons:
+
+1. **GitHub Pages not enabled**  
+   On GitHub: go to the repo **Settings → Pages**. Under “Build and deployment”, set **Source** to **Deploy from a branch**. Choose branch **main** and folder **/ (root)**, then Save. The first deploy can take 1–2 minutes.
+
+2. **Cache**  
+   Your browser or GitHub’s CDN may be serving an old copy. Try:
+   - **Hard refresh:** `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac).
+   - Or open the app in a **private/incognito** window.
+
+3. **Deploy delay**  
+   After a push, GitHub Pages often updates within 1–2 minutes. Check status at:  
+   **https://github.com/marlonbarrios/extraordinary_alien2/deployments** (look for “github-pages” and the latest deployment).
+
+---
+
 ## Functionality
 
 - **Particle Simulation:**  
