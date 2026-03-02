@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="Extraordinary Alien — Interactive soft-body creature with hand tracking. Part of Duets in Latent Space." />
+  <title>Extraordinary Alien</title>
+
+  <!-- p5.js and Sound Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.8.0/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.8.0/addons/p5.sound.js"></script>
+  
+  <!-- Toxiclibs -->
+  <script src="https://cdn.jsdelivr.net/gh/hapticdata/toxiclibsjs@0.3.2/build/toxiclibs.js"></script>
+
+  <!-- MediaPipe hand tracking (no TF fetch; loads from Google CDN) -->
+  <script type="module">
+    import { mediaPipe } from "./mediaPipe.js";
+    window.mediaPipe = mediaPipe;
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+  <main>
+  </main>
+ 
+  <!-- Your scripts -->
+  <script src="particle.js"></script>
+  <script src="spring.js"></script>
+  <script src="sketch.js"></script>
+</body>
+
+</html>
